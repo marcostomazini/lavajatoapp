@@ -1,8 +1,8 @@
 {
-  "name": "ionic3-start-theme",
-  "version": "0.0.3",
-  "author": "João Firmino <firminoata@gmail.com>",
-  "homepage": "https://market.ionicframework.com/themes/ionic3-start-theme",
+  "name": "lavajatoapp",
+  "version": "0.0.1",
+  "author": "Marcos Tomazini <marcos.tomazini@gmail.com>",
+  "homepage": "http://www.arquitetaweb.com",
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
@@ -44,7 +44,7 @@
     "ionic": "3.19.0",
     "typescript": "2.3.4"
   },
-  "description": "Ionic 3 Start Theme",
+  "description": "Controle Lava Jato - ArquitetaWeb",
   "cordovaPlugins": [],
   "cordovaPlatforms": [],
   "cordova": {

@@ -1,0 +1,24 @@
+page-servicos,
+.servicos {
+	.card {
+		border-radius: 1rem;
+	}
+  .servico {
+    overflow: hidden;
+    .Finalizado {
+      background-color: green !important;
+    }
+    .Atendimento { 
+      background-color: #b14747 !important;
+    }
+    .Fila {
+      background-color: blue !important;
+    }
+    .Padrao {
+      background-color: black;
+    }
+    .sendSMS {
+      background-color: #008000;
+    }
+  }
+}

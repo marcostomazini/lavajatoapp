@@ -8,6 +8,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { LocalWeatherPage } from "../pages/local-weather/local-weather";
+import { ServicosPage } from "../pages/movimentacoes/servicos";
 
 export interface MenuItem {
     title: string;
@@ -25,6 +26,7 @@ export class MyApp {
   rootPage: any = LoginPage;
 
   appMenuItems: Array<MenuItem>;
+  profile: any;
 
   constructor(
     public platform: Platform,
@@ -35,8 +37,10 @@ export class MyApp {
     this.initializeApp();
 
     this.appMenuItems = [
-      {title: 'Home', component: HomePage, icon: 'home'},
-      {title: 'Local Weather', component: LocalWeatherPage, icon: 'partly-sunny'}
+      {title: 'Inicio', component: ServicosPage, icon: 'home'},
+      {title: 'Serviços', component: ServicosPage, icon: 'people'},
+      {title: 'Pagamentos', component: HomePage, icon: 'card'},
+      {title: 'Depositos', component: LocalWeatherPage, icon: 'mail'}
     ];
   }
 
@@ -45,8 +49,8 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
 
       //*** Control Splash Screen
-      // this.splashScreen.show();
-      // this.splashScreen.hide();
+      this.splashScreen.show();
+      this.splashScreen.hide();
 
       //*** Control Status Bar
       this.statusBar.styleDefault();
@@ -55,6 +59,10 @@ export class MyApp {
       //*** Control Keyboard
       this.keyboard.disableScroll(true);
     });
+
+    // efetuar o login e popular esse objeto
+    this.profile = {nome: 'Marcos Tomazini', token: 'tokenapi'};
+
   }
 
   openPage(page) {

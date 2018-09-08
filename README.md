@@ -1,3 +1,9 @@
-# Ionic 3 Start Theme
+# Lava Jato App
 
-Ionic 3 Start Theme with 10 Pages, mock data, providers samples, Storage, Http and more...
+Aplicativo de Controle de Entrada e Saida para Lava Rapidos/Lava Jatos/Lava Car
+
+// execute local
+ionic serve
+
+// gerar apk
+ionic cordova build --release android

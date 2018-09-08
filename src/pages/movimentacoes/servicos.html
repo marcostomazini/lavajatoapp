@@ -1,0 +1,59 @@
+<!-- -->
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <strong>Lava Jato</strong> Serviços
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button tappable (click)="presentNotifications($event)">
+        <ion-icon name="notifications"></ion-icon>
+      </button>
+      <button ion-button tappable (click)="goToAccount()">
+        <ion-icon name="cog"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  
+   <!--  -->
+  <ion-toolbar padding color="light">
+    <p ion-text no-margin class="text-white">      
+      <button ion-button icon-start block no-margin color="primary" class="round" tappable (click)="doInserirServico()">
+        <ion-icon name="car"></ion-icon> Adicionar
+      </button>
+    </p>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding class="servicos detail-bg">
+  <!--list of trips-->
+
+<ion-grid class="servico">
+
+<ion-row *ngFor="let item of servicos">
+    
+    <ion-col col-10>
+      <div class="servico card">       
+        <div class="padding-sm Padrao" [ngClass]="item.situacao" tappable (click)="viewDetail(item.id)">
+          <ion-icon name="car" class="text-white"></ion-icon>
+          <span ion-text class="text-white">{{ item.nomeCliente }}</span>
+          <span ion-text  class="pull-right text-white">{{ item.placa }}</span>      
+        </div>     
+      </div>
+    </ion-col>
+    
+    <ion-col col-2>
+      <button ion-button no-margin class="round pull-right sendSMS" tappable (click)="doFinalizarServico(item)">
+          <ion-icon icon-start name="checkmark"></ion-icon>
+      </button>
+    </ion-col>
+
+  </ion-row>
+
+</ion-grid>  
+
+
+</ion-content>
