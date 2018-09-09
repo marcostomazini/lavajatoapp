@@ -1,7 +1,8 @@
 import {Component} from "@angular/core";
-import {NavController,AlertController, ToastController} from "ionic-angular";
+import { LoadingController, NavController,AlertController, ToastController} from "ionic-angular";
 import {ServicoService} from "../../services/servico-service";
 import {ServicoDetailPage} from "../movimentacoes/servico-detail";
+import {Storage} from '@ionic/storage';
 
 @Component({
   selector: 'page-servicos',
@@ -11,27 +12,77 @@ export class ServicosPage {
   // list of trips
   public servicos: any;
 
-  constructor(public nav: NavController, public servicoService: ServicoService, public forgotCtrl: AlertController, public toastCtrl: ToastController) {
-    this.servicos = servicoService.getAll();
+  constructor(public nav: NavController, public servicoService: ServicoService, public loadingController: LoadingController,
+    public forgotCtrl: AlertController, public toastCtrl: ToastController, private storage: Storage) {
+    this.getServicos();
+  }
+
+  // login and go to home page
+  getServicos() {   
+    
+    let loader = this.loadingController.create({
+      content: "carregando serviços, aguarde..."
+    });  
+    loader.present();
+
+    this.storage.get('profile').then((val) => {
+      this.servicoService.getServicos(val.token)
+      .subscribe(
+        (res) => {           
+          this.servicos = res;
+        },
+        (err) => { 
+          let toast = this.toastCtrl.create({
+              message: err.error,
+              duration: 3000,
+              position: 'top',
+              cssClass: 'dark-trans',
+              closeButtonText: 'OK',
+              showCloseButton: true
+            });
+            toast.present();          
+            loader.dismiss();
+        },
+        () => {
+          loader.dismiss();
+        }
+      );
+    });       
   }
 
   // view trip detail
-  viewDetail(id) {
-    this.nav.push(ServicoDetailPage, {id: id});
+  viewDetail(servico) {
+    this.nav.push(ServicoDetailPage, {servico: servico});
   }
 
   doFinalizarServico(item) {
     if (item.situacao === 'Finalizado') {
-      let toast = this.toastCtrl.create({
-        message: 'Valor recebido ?',
-        duration: 3000,
-        position: 'top',
-        cssClass: 'dark-trans',
-        closeButtonText: 'OK',
-        showCloseButton: true
+     let alert = this.forgotCtrl.create({
+        title: 'dinheiro',
+        inputs: [
+          {
+            name: 'digite o valor',
+            placeholder: 'valor',
+            type: 'number'
+          }
+        ],
+        buttons: [
+          {
+            text: 'cancelar',
+            role: 'cancel',
+            handler: data => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'salvar',
+            handler: data => {
+              item.situacao = 'Pago';
+            }
+          }
+        ]
       });
-      toast.present();
-      item.situacao = 'Pago';
+      alert.present();      
     } else {
       let forgot = this.forgotCtrl.create({
         title: 'Finalizar Serviço?',

@@ -2,7 +2,7 @@
 importScripts('./build/sw-toolbox.js');
 
 self.toolbox.options.cache = {
-  name: 'ionic3-start-theme-cache'
+  name: 'lavajatoapp-cache'
 };
 
 // pre-cache our key assets

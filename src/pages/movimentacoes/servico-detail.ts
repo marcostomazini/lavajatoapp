@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {NavController} from "ionic-angular";
+import { NavParams, NavController } from "ionic-angular";
 import {ServicoService} from "../../services/servico-service";
 
 @Component({
@@ -9,11 +9,9 @@ import {ServicoService} from "../../services/servico-service";
 export class ServicoDetailPage {
   // trip info
   public servico: any;
-
   public paymethods = 'dinheiro';
 
-  constructor(public nav: NavController, public servicoService: ServicoService) {
-    // set sample data
-    this.servico = servicoService.getItem(1);
+  constructor(public nav: NavController, public servicoService: ServicoService, public navParams: NavParams) {
+    this.servico = navParams.get("servico");
   }
 }

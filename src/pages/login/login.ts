@@ -1,24 +1,26 @@
 import {Component} from "@angular/core";
-import {LoadingController, NavController, AlertController, ToastController, MenuController } from "ionic-angular";
+import { Events, LoadingController, NavController, AlertController, ToastController, MenuController } from "ionic-angular";
 import {HomePage} from "../home/home";
 import {RegisterPage} from "../register/register";
 import {ServicosPage} from "../movimentacoes/servicos";
 import {LoginService} from "../../services/login-service";
 import 'rxjs/add/operator/map';
+import {Storage} from '@ionic/storage';
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
 export class LoginPage {
-  profile: any;
+  public profile: any;
   public user = {
     username: 'teste@teste.com',
     password: 'teste123'
   };
   
-  constructor(public nav: NavController, public loadingController: LoadingController, public forgotCtrl: AlertController, public menu: MenuController, 
-  public toastCtrl: ToastController, public loginService: LoginService) {
+  constructor(public nav: NavController, public events: Events, public loadingController: LoadingController, 
+    public forgotCtrl: AlertController, public menu: MenuController, private storage: Storage, 
+    public toastCtrl: ToastController, public loginService: LoginService) {
     this.menu.swipeEnable(false);
   }
 
@@ -37,9 +39,11 @@ export class LoginPage {
 
     this.loginService.login(request)
       .subscribe(
-        (res) => { 
+        (res) => {           
           this.profile = res;
+          this.storage.set('profile', this.profile);
           if (this.profile.ativo == true) {
+            this.events.publish('logged', this.profile);
             this.nav.setRoot(ServicosPage);
           }
         },
@@ -53,7 +57,8 @@ export class LoginPage {
               closeButtonText: 'OK',
               showCloseButton: true
             });
-            toast.present();          
+            toast.present();
+            loader.dismiss();
         },
         () => {
           loader.dismiss();

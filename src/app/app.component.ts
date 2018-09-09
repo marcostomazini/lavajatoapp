@@ -1,5 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
-import { Platform, Nav } from "ionic-angular";
+import { Events, Platform, Nav } from "ionic-angular";
+
+import {Storage} from '@ionic/storage';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -16,6 +18,10 @@ export interface MenuItem {
     icon: string;
 }
 
+export class Profile {
+    name: string = '';
+}
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -26,13 +32,15 @@ export class MyApp {
   rootPage: any = LoginPage;
 
   appMenuItems: Array<MenuItem>;
-  profile: any;
+  profile: Profile;
 
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    public keyboard: Keyboard
+    public keyboard: Keyboard,
+    private storage: Storage,
+    public events: Events
   ) {
     this.initializeApp();
 
@@ -42,6 +50,10 @@ export class MyApp {
       {title: 'Pagamentos', component: HomePage, icon: 'card'},
       {title: 'Depositos', component: LocalWeatherPage, icon: 'mail'}
     ];
+
+    this.events.subscribe('logged', (profile) => {
+      this.profile = profile;
+    });
   }
 
   initializeApp() {
@@ -57,22 +69,22 @@ export class MyApp {
       this.statusBar.overlaysWebView(false);
 
       //*** Control Keyboard
-      this.keyboard.disableScroll(true);
+      this.keyboard.disableScroll(true);  
     });
 
-    // efetuar o login e popular esse objeto
-    this.profile = {nome: 'Marcos Tomazini', token: 'tokenapi'};
+    this.profile = new Profile;
 
   }
 
   openPage(page) {
     // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
+    // we wouldn't want the back button to show in this scenario    
     this.nav.setRoot(page.component);
   }
 
-  logout() {
+  logout() {    
     this.nav.setRoot(LoginPage);
+    this.profile = new Profile;
   }
 
 }

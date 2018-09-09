@@ -5,13 +5,13 @@
       <ion-grid>
         <ion-row>
           <ion-col col-4>
-              <div class="user-avatar">
-                <img src="../assets/img/avatar.jpeg">
-              </div>
+              <!--<div class="user-avatar">
+                <img [src]="profile.picture">
+              </div>-->
           </ion-col>
           <ion-col padding-top col-8>
             <h2 ion-text class="no-margin bold text-white">
-              {{profile.nome}}
+              {{profile.name}}
             </h2>
           </ion-col>
         </ion-row>
@@ -20,7 +20,7 @@
           <ion-col no-padding class="column">
             <button ion-button icon-left small full color="light" menuClose (click)="logout()">
               <ion-icon name="log-out"></ion-icon>
-              Log Out
+              Sair
             </button>
           </ion-col>
         </ion-row>
