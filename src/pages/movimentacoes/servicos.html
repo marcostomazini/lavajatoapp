@@ -35,7 +35,17 @@
 
 <ion-row *ngFor="let item of servicos">
     
-    <ion-col col-10>
+    <ion-col col-10 *ngIf="item.situacao !== 'Pago'">
+      <div class="servico card">       
+        <div class="padding-sm Padrao" [ngClass]="item.situacao" tappable (click)="viewDetail(item.id)">
+          <ion-icon name="car" class="text-white"></ion-icon>
+          <span ion-text class="text-white">{{ item.nomeCliente }}</span>
+          <span ion-text  class="pull-right text-white">{{ item.placa }}</span>      
+        </div>     
+      </div>
+    </ion-col>
+
+    <ion-col col-12 *ngIf="item.situacao === 'Pago'">
       <div class="servico card">       
         <div class="padding-sm Padrao" [ngClass]="item.situacao" tappable (click)="viewDetail(item.id)">
           <ion-icon name="car" class="text-white"></ion-icon>
@@ -45,9 +55,10 @@
       </div>
     </ion-col>
     
-    <ion-col col-2>
+    <ion-col col-2 *ngIf="item.situacao !== 'Pago'">
       <button ion-button no-margin class="round pull-right sendSMS" tappable (click)="doFinalizarServico(item)">
-          <ion-icon icon-start name="checkmark"></ion-icon>
+          <ion-icon icon-start name="cash" *ngIf="item.situacao === 'Finalizado'"></ion-icon>
+          <ion-icon icon-start name="checkmark" *ngIf="item.situacao !== 'Finalizado'"></ion-icon>
       </button>
     </ion-col>
 

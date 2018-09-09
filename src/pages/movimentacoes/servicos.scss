@@ -4,15 +4,18 @@ page-servicos,
 		border-radius: 1rem;
 	}
   .servico {
-    overflow: hidden;
-    .Finalizado {
-      background-color: green !important;
+    overflow: hidden;    
+    .Fila {
+      background-color: blue !important;
     }
     .Atendimento { 
       background-color: #b14747 !important;
     }
-    .Fila {
-      background-color: blue !important;
+    .Finalizado {
+      background-color: green !important;
+    }
+    .Pago {
+      background-color: #657f80 !important;
     }
     .Padrao {
       background-color: black;

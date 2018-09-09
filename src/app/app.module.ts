@@ -12,6 +12,7 @@ import {ActivityService} from "../services/activity-service";
 import {TripService} from "../services/trip-service";
 import {WeatherProvider} from "../services/weather";
 import { ServicoService } from "../services/servico-service";
+import { LoginService } from "../services/login-service";
 
 import {MyApp} from "./app.component";
 
@@ -25,7 +26,9 @@ import {SearchLocationPage} from "../pages/search-location/search-location";
 import {TripDetailPage} from "../pages/trip-detail/trip-detail";
 import {TripsPage} from "../pages/trips/trips";
 import {LocalWeatherPage} from "../pages/local-weather/local-weather";
-import {ServicosPage} from "../pages/movimentacoes/servicos";
+
+import { ServicosPage } from "../pages/movimentacoes/servicos";
+import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
 
 // import services
 // end import services
@@ -47,7 +50,8 @@ import {ServicosPage} from "../pages/movimentacoes/servicos";
     SearchLocationPage,
     TripDetailPage,
     TripsPage,
-    ServicosPage
+    ServicosPage,
+    ServicoDetailPage
   ],
   imports: [
     BrowserModule,
@@ -75,7 +79,8 @@ import {ServicosPage} from "../pages/movimentacoes/servicos";
     SearchLocationPage,
     TripDetailPage,
     TripsPage,
-    ServicosPage
+    ServicosPage,
+    ServicoDetailPage
   ],
   providers: [
     StatusBar,
@@ -84,7 +89,8 @@ import {ServicosPage} from "../pages/movimentacoes/servicos";
     ActivityService,
     TripService,
     WeatherProvider,
-    ServicoService
+    ServicoService,
+    LoginService
   ]
 })
 

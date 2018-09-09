@@ -1,16 +1,24 @@
 import {Component} from "@angular/core";
-import {NavController, AlertController, ToastController, MenuController} from "ionic-angular";
+import {LoadingController, NavController, AlertController, ToastController, MenuController } from "ionic-angular";
 import {HomePage} from "../home/home";
 import {RegisterPage} from "../register/register";
 import {ServicosPage} from "../movimentacoes/servicos";
+import {LoginService} from "../../services/login-service";
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
 export class LoginPage {
-
-  constructor(public nav: NavController, public forgotCtrl: AlertController, public menu: MenuController, public toastCtrl: ToastController) {
+  profile: any;
+  public user = {
+    username: 'teste@teste.com',
+    password: 'teste123'
+  };
+  
+  constructor(public nav: NavController, public loadingController: LoadingController, public forgotCtrl: AlertController, public menu: MenuController, 
+  public toastCtrl: ToastController, public loginService: LoginService) {
     this.menu.swipeEnable(false);
   }
 
@@ -20,13 +28,42 @@ export class LoginPage {
   }
 
   // login and go to home page
-  login() {
-    this.nav.setRoot(ServicosPage);
+  login(request) {   
+    
+    let loader = this.loadingController.create({
+      content: "aguarde..."
+    });  
+    loader.present();
+
+    this.loginService.login(request)
+      .subscribe(
+        (res) => { 
+          this.profile = res;
+          if (this.profile.ativo == true) {
+            this.nav.setRoot(ServicosPage);
+          }
+        },
+        (err) => { 
+          let error = JSON.parse(err.error);
+          let toast = this.toastCtrl.create({
+              message: error.message,
+              duration: 3000,
+              position: 'top',
+              cssClass: 'dark-trans',
+              closeButtonText: 'OK',
+              showCloseButton: true
+            });
+            toast.present();          
+        },
+        () => {
+          loader.dismiss();
+        }
+      );
   }
 
   // login and go to home page
-  loginGmail() {
-    this.nav.setRoot(HomePage);
+  loginGmail(user) {
+    this.login(user);
   }
 
   forgotPass() {

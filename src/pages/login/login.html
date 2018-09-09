@@ -17,7 +17,7 @@
           <ion-icon name="mail" item-start class="text-primary"></ion-icon>
           Email
         </ion-label>
-        <ion-input type="email"></ion-input>
+        <ion-input type="email" name="username" [(ngModel)]="user.username"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -25,19 +25,19 @@
           <ion-icon name="lock" item-start class="text-primary"></ion-icon>
           Senha
         </ion-label>
-        <ion-input type="password"></ion-input>
+        <ion-input type="password" name="password" [(ngModel)]="user.password"></ion-input>
       </ion-item>
     </form>
 
     <p text-right ion-text color="secondary" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p>
 
     <div>
-      <button ion-button icon-start block color="dark" tappable (click)="login()">
+      <button ion-button icon-start block color="dark" tappable (click)="login(user)">
         <ion-icon name="log-in"></ion-icon>
         Entrar
       </button>
 
-      <button ion-button icon-only block color="dark" class="btn-gplus" tappable (click)="loginGmail()">
+      <button ion-button icon-only block color="dark" class="btn-gplus" tappable (click)="loginGmail(user)">
         <ion-icon name="logo-googleplus"></ion-icon>
       </button>
 
