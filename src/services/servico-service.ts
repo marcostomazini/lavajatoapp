@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import {Storage} from '@ionic/storage';
 
 @Injectable()
 export class ServicoService {
@@ -13,7 +12,7 @@ export class ServicoService {
   //urlPrincipal = 'http://localhost:3000';
   urlMobile = '/api/mobile/'; 
 
-  constructor(public http: HttpClient, private storage: Storage) {
+  constructor(public http: HttpClient) {
     this.url = this.urlPrincipal + this.urlMobile;
     //this.servicos = SERVICOS;    
   }
@@ -29,6 +28,43 @@ export class ServicoService {
     };
 
     return this.http.get(this.url + 'servicos', requestOptions).map(res => res);
+  }
+
+  saveServicos(token, servico) {
+    const headerDict = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer ' + token                          
+    }
+
+    const requestOptions = {                                                                                                                                                                                 
+      headers: new HttpHeaders(headerDict), 
+    };
+
+    if (servico.placa != undefined) 
+        servico.placa = servico.placa.toUpperCase();
+      
+    if (servico._id == undefined) {     
+      return this.http.post(this.url + 'servicos', servico, requestOptions).map(res => res);
+    } else {
+      if (servico.valorRecebido.length > 0)
+        servico.situacao = 'Pago';
+      return this.http.put(this.url + 'servico/' + servico._id, servico, requestOptions).map(res => res);
+    }    
+  }
+
+  alteraSituacao(token, servico, situacao) {
+    const headerDict = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer ' + token                          
+    }
+
+    const requestOptions = {                                                                                                                                                                                 
+      headers: new HttpHeaders(headerDict), 
+    };
+
+    servico.situacao = situacao;
+
+    return this.http.put(this.url + 'servico/' + servico._id, servico, requestOptions).map(res => res);
   }
 
   getItem(id) {

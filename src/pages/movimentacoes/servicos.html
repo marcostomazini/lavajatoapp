@@ -8,23 +8,25 @@
       <strong>Lava Jato</strong> Serviços
     </ion-title>
     <ion-buttons end>
-      <button ion-button tappable (click)="presentNotifications($event)">
-        <ion-icon name="notifications"></ion-icon>
+      <button ion-button tappable (click)="doInserirServico()">
+        <ion-icon name="add"></ion-icon>
       </button>
-      <button ion-button tappable (click)="goToAccount()">
-        <ion-icon name="cog"></ion-icon>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button tappable (click)="getServicos()">
+        <ion-icon name="refresh"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
   
    <!--  -->
-  <ion-toolbar padding color="light">
+  <!--<ion-toolbar padding color="light">
     <p ion-text no-margin class="text-white">      
       <button ion-button icon-start block no-margin color="primary" class="round" tappable (click)="doInserirServico()">
         <ion-icon name="car"></ion-icon> Adicionar
       </button>
     </p>
-  </ion-toolbar>
+  </ion-toolbar>-->
 
 </ion-header>
 
