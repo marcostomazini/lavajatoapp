@@ -4,6 +4,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
 import {IonicStorageModule} from '@ionic/storage';
 
+import {Ionic2MaskDirective} from "ionic2-mask-directive";
+
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Keyboard} from '@ionic-native/keyboard';
@@ -40,6 +42,7 @@ import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
 @NgModule({
   declarations: [
     MyApp,
+    Ionic2MaskDirective,
     SettingsPage,
     CheckoutTripPage,
     HomePage,

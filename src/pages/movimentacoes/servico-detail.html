@@ -26,15 +26,15 @@
         <ion-icon name="car" item-start class="text-primary"></ion-icon>
         placa
       </ion-label>
-      <ion-input type="text" maxlength="7" name="placa" [(ngModel)]="servico.placa"></ion-input>
+      <ion-input type="text" mask="AAA-9999" name="placa" [(ngModel)]="servico.placa"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label floating>
         <ion-icon name="phone-portrait" item-start class="text-primary"></ion-icon>
-        celular com ddd ex: 044988281234
+        celular
       </ion-label>
-      <ion-input type="text" maxlength="12" name="celular" [(ngModel)]="servico.celular"></ion-input>
+      <ion-input type="text" mask="(99) 99999-9999" name="celular" [(ngModel)]="servico.celular"></ion-input>
     </ion-item>
 
     <ion-item>
