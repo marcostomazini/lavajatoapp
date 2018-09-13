@@ -3,6 +3,8 @@ import {IonicApp, IonicModule} from "ionic-angular";
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
 import {IonicStorageModule} from '@ionic/storage';
+import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { SMS } from '@ionic-native/sms';
 
 import {Ionic2MaskDirective} from "ionic2-mask-directive";
 
@@ -65,7 +67,7 @@ import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
       autoFocusAssist: false
     }),
     IonicStorageModule.forRoot({
-      name: '__ionic3_start_theme',
+      name: '__arquitetaweb_lavajato',
         driverOrder: ['indexeddb', 'sqlite', 'websql']
     })
   ],
@@ -89,6 +91,8 @@ import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
     StatusBar,
     SplashScreen,
     Keyboard,
+    InAppBrowser,
+    SMS,
     ActivityService,
     TripService,
     WeatherProvider,

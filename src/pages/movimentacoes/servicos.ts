@@ -1,20 +1,34 @@
 import {Component} from "@angular/core";
 import { Events, LoadingController, NavController,AlertController, ToastController} from "ionic-angular";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { SMS } from '@ionic-native/sms';
 import {ServicoService} from "../../services/servico-service";
 import {ServicoDetailPage} from "../movimentacoes/servico-detail";
 import {Storage} from '@ionic/storage';
+import * as _ from 'underscore';
+import * as moment from 'moment';
+
+export interface NovoServico {
+    nomeCliente: string;
+    placa: string;
+    celular: string;
+    tipoServico: string;
+    observacao: string;
+}
 
 @Component({
   selector: 'page-servicos',
   templateUrl: 'servicos.html'
 })
 
-export class ServicosPage {
-  // list of trips
+export class ServicosPage {  
   public servicos: any;
-
+  public configuracoes: any;
+  public situacoes: any;
+  public servicosPorSituacoes: any; 
+  public somenteDiaAtual: any = true;
   
-  public novoServico: any = {
+  public novoServico: NovoServico = {
     nomeCliente: '',
     placa: '',
     celular: '',
@@ -23,12 +37,53 @@ export class ServicosPage {
   }; 
 
   constructor(public nav: NavController, public servicoService: ServicoService, public loadingController: LoadingController,
-    public forgotCtrl: AlertController, public toastCtrl: ToastController, private storage: Storage, public events: Events) {
-    this.getServicos();
+    public forgotCtrl: AlertController, public toastCtrl: ToastController, private storage: Storage, public events: Events,
+    public iab: InAppBrowser, public sms: SMS) {
+    this.getConfiguracoes();    
+    this.getServicos();    
 
     this.events.subscribe('updateServico', () => {
-      this.getServicos();
+      this.getServicos();      
     });
+  }
+
+  criarServico() : NovoServico {
+    return this.novoServico = {
+      nomeCliente: '',
+      placa: '',
+      celular: '',
+      tipoServico: '',
+      observacao: ''
+    }; 
+  }
+
+  alterarCorData(item) {
+    var now = moment();
+    var dataAtual = moment(now.format(), [moment.ISO_8601]).format("DD/MM");   
+
+    var unixDate = parseInt(item.dataHoraEntrada);
+    var dataEntrada = moment(unixDate).format('DD/MM');
+
+    if (dataEntrada != dataAtual) {
+      return "dataPassada";
+    }
+  }
+
+  verificaServicosPorDia() {
+    var now = moment();
+    var dataAtual = moment(now.format(), [moment.ISO_8601]).format("DD/MM");    
+    if (this.somenteDiaAtual) {
+      this.servicos = _.filter(this.servicos, function(item)  { 
+        var unixDate = parseInt(item.dataHoraEntrada);     
+        var dataEntrada = moment(unixDate).format('DD/MM');
+        return dataEntrada == dataAtual;
+      });
+    } 
+  }
+
+  // enum: ['Fila', 'Atendimento', 'Finalizado', 'Pago', 'Outros'],
+  servicosPorSituacao(situacao) {
+    return _.where(this.servicos, { situacao: situacao });
   }
 
   // login and go to home page
@@ -44,6 +99,44 @@ export class ServicosPage {
       .subscribe(
         (res) => {           
           this.servicos = res;
+          this.situacoes = _.sortBy(_.uniq(
+            _.pluck(this.servicos, 'situacao'), function(situacao) { 
+              return situacao; 
+            }
+          ), _.identity);
+
+          this.verificaServicosPorDia();
+        },
+        (err) => { 
+          let toast = this.toastCtrl.create({
+              message: err.error,
+              duration: 3000,
+              position: 'top',
+              cssClass: 'dark-trans',
+              closeButtonText: 'OK',
+              showCloseButton: true
+            });
+            toast.present();          
+            loader.dismiss();
+        },
+        () => {
+          loader.dismiss();
+        }
+      );
+    });       
+  }
+
+  getConfiguracoes() {    
+    let loader = this.loadingController.create({
+      content: "carregando configurações, aguarde..."
+    });  
+    loader.present();
+
+    this.storage.get('profile').then((val) => {
+      this.servicoService.getConfiguracoes(val.token)
+      .subscribe(
+        (res) => {           
+          this.configuracoes = res;
         },
         (err) => { 
           let toast = this.toastCtrl.create({
@@ -106,6 +199,7 @@ export class ServicosPage {
   }
 
   doInserirServico() {
+    this.novoServico = this.criarServico();
     this.nav.push(ServicoDetailPage, { servico: this.novoServico });
   }
 
@@ -114,10 +208,27 @@ export class ServicosPage {
     this.nav.push(ServicoDetailPage, {servico: servico});
   }
 
+  finalizarWhatsApp(cliente) {
+    // https://api.whatsapp.com/send?phone=5544988282045&text=oiii
+    this.alterarSituacao(cliente, 'Finalizado');
+    var mensagem = _.findWhere(this.configuracoes, { nome: "SMS_FINALIZADO"});
+
+    
+    var numeroCelular = "55" + cliente.celular.replace(/\D+/g, '');
+    const browser = this.iab.create('https://api.whatsapp.com/send?phone=' + numeroCelular + '&text=' + 
+      encodeURI(this.converteTexto(cliente, mensagem.valor)));
+    browser.show();
+  }
+
+  finalizarSMS(cliente) {
+    this.alterarSituacao(cliente, 'Finalizado');
+    var mensagem = _.findWhere(this.configuracoes, { nome: "SMS_FINALIZADO"});
+    var numeroCelular = "55" + cliente.celular.replace(/\D+/g, '');   
+    this.sms.send(numeroCelular, this.converteTexto(cliente, mensagem.valor));
+  }
+ 
   doFinalizarServico(item) {
-    if (item.situacao === 'Fila') {
-      this.alterarSituacao(item, 'Atendimento');
-    } else if (item.situacao === 'Finalizado') {
+    if (item.situacao === 'Finalizado') {
      let alert = this.forgotCtrl.create({
         title: 'dinheiro',
         inputs: [
@@ -171,7 +282,6 @@ export class ServicosPage {
           {
             text: 'Somente Finalizar',
             handler: data => {
-              console.log('Finalizar somente clicked');
               let toast = this.toastCtrl.create({
                 message: 'Finalizar enviado',
                 duration: 3000,
@@ -181,13 +291,12 @@ export class ServicosPage {
                 showCloseButton: true
               });
               toast.present();
-              item.situacao = 'Finalizado';
+              this.alterarSituacao(item, 'Finalizado');
             }
           },
           {
             text: 'WhatsApp',
-            handler: data => {
-              console.log('Send wp clicked');
+            handler: data => {             
               let toast = this.toastCtrl.create({
                 message: 'Whats enviado',
                 duration: 3000,
@@ -197,12 +306,12 @@ export class ServicosPage {
                 showCloseButton: true
               });
               toast.present();
+              this.finalizarWhatsApp(item);
             }
           },
           {
             text: 'SMS',
             handler: data => {
-              console.log('Send sms clicked');
               let toast = this.toastCtrl.create({
                 message: 'SMS enviado',
                 duration: 3000,
@@ -212,11 +321,20 @@ export class ServicosPage {
                 showCloseButton: true
               });
               toast.present();
+              this.alterarSituacao(item, 'Finalizado');
             }
           }
         ]
       });
       forgot.present();
     }
+  }
+
+  converteTexto(cliente, texto) {
+    var novoTexto = texto.replace("%nome%", cliente.nomeCliente);
+    novoTexto = novoTexto.replace("%placa%", cliente.placa);
+    novoTexto = novoTexto.replace("%servico%", cliente.tipoServico);
+    
+    return novoTexto;
   }
 }

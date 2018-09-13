@@ -3,7 +3,7 @@ import { Events, LoadingController, NavController, AlertController, ToastControl
 import {HomePage} from "../home/home";
 import {RegisterPage} from "../register/register";
 import {ServicosPage} from "../movimentacoes/servicos";
-import {LoginService} from "../../services/login-service";
+import {ServicoService} from "../../services/servico-service";
 import 'rxjs/add/operator/map';
 import {Storage} from '@ionic/storage';
 
@@ -20,7 +20,7 @@ export class LoginPage {
   
   constructor(public nav: NavController, public events: Events, public loadingController: LoadingController, 
     public forgotCtrl: AlertController, public menu: MenuController, private storage: Storage, 
-    public toastCtrl: ToastController, public loginService: LoginService) {
+    public toastCtrl: ToastController, public servicoService: ServicoService) {
     this.menu.swipeEnable(false);
   }
 
@@ -31,13 +31,13 @@ export class LoginPage {
 
   // login and go to home page
   login(request) {   
-    
+    //this.storage.remove('profile');
     let loader = this.loadingController.create({
       content: "aguarde..."
     });  
-    loader.present();
+    loader.present();        
 
-    this.loginService.login(request)
+    this.servicoService.login(request)
       .subscribe(
         (res) => {           
           this.profile = res;
@@ -66,9 +66,16 @@ export class LoginPage {
       );
   }
 
-  // login and go to home page
-  loginGmail(user) {
-    this.login(user);
+  semAcao() {
+    let toast = this.toastCtrl.create({
+        message: 'não implementado, entrar em contato com marcos.tomazini@gmail.com',
+        duration: 3000,
+        position: 'top',
+        cssClass: 'dark-trans',
+        closeButtonText: 'OK',
+        showCloseButton: true
+      });
+      toast.present();
   }
 
   forgotPass() {

@@ -29,7 +29,7 @@
       </ion-item>
     </form>
 
-    <p text-right ion-text color="secondary" tappable (click)="forgotPass()"><strong>Esqueceu a Senha?</strong></p>
+    <p text-right ion-text color="secondary" tappable (click)="semAcao()"><strong>Esqueceu a Senha?</strong></p>
 
     <div>
       <button ion-button icon-start block color="dark" tappable (click)="login(user)">
@@ -37,16 +37,17 @@
         Entrar
       </button>
 
-      <button ion-button icon-only block color="dark" class="btn-gplus" tappable (click)="loginGmail(user)">
+      
+      <button ion-button icon-only block color="dark" class="btn-gplus" tappable (click)="semAcao()">
         <ion-icon name="logo-googleplus"></ion-icon>
       </button>
 
     </div>
 
 
-    <!-- Other links -->
+    <!-- Other links -->    
     <div text-center margin-top>
-      <span ion-text color="secondary" tappable (click)="register()">Novo? <strong>Cadastrar</strong></span>
+      <span ion-text color="secondary" tappable (click)="semAcao()">Novo? <strong>Cadastrar</strong></span>
     </div>
 
   </div>

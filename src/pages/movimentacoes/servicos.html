@@ -17,6 +17,9 @@
         <ion-icon name="refresh"></ion-icon>
       </button>
     </ion-buttons>
+    <ion-buttons end>
+      <ion-checkbox [(ngModel)]="somenteDiaAtual" (ionChange)="getServicos()"></ion-checkbox>
+    </ion-buttons>
   </ion-navbar>
   
    <!--  -->
@@ -30,9 +33,9 @@
 
 </ion-header>
 
-<ion-content padding class="servicos detail-bg">
+<ion-content padding class="servico servicos detail-bg">
   <!--list of trips-->
-
+<!--
 <ion-grid class="servico">
 
 <ion-row *ngFor="let item of servicos">
@@ -64,9 +67,49 @@
       </button>
     </ion-col>
 
-  </ion-row>
+</ion-row>
 
 </ion-grid>  
+-->
 
+<ion-list>
+    <div  *ngFor="let situacao of situacoes">    
+      <ion-list-header class="headerServico">
+        {{ situacao }}
+      </ion-list-header>
+
+      <ion-item-sliding *ngFor="let item of servicosPorSituacao(situacao)">
+        <ion-item tappable (click)="viewDetail(item)" [ngClass]="alterarCorData(item)">
+          <ion-icon name="car" class="pull-right itemServico"></ion-icon>
+          <h2>{{ item.placa }}</h2>
+          <p class="pull-left">{{ item.nomeCliente }}</p>
+          <p class="pull-right"  style="margin-right: -23px">{{ item.dataHoraEntrada | date:'dd/MM HH:mm' }}</p>
+        </ion-item>
+        <ion-item-options>          
+          <button ion-button color="secondary" icon-start *ngIf="situacao === 'Fila'"
+                tappable (click)="alterarSituacao(item, 'Atendimento')">
+            <ion-icon name="car"></ion-icon>
+            Iniciar
+          </button>
+          <button ion-button color="primary" icon-start *ngIf="situacao === 'Atendimento'"
+                tappable (click)="doFinalizarServico(item)">
+            <ion-icon name="checkmark"></ion-icon>
+            Finalizar
+          </button>
+          <button ion-button color="primary" icon-start *ngIf="situacao === 'Finalizado'"
+                tappable (click)="doFinalizarServico(item)">
+            <ion-icon name="cash"></ion-icon>
+            Receber
+          </button>
+          <button ion-button color="primary" icon-start *ngIf="situacao === 'Pago'"
+                tappable (click)="alterarSituacao(item, 'Atendimento')">
+            <ion-icon name="car"></ion-icon>
+            Atendimento
+          </button>  
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+
+  </ion-list> 
 
 </ion-content>

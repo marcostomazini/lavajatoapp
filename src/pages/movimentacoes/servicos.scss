@@ -4,7 +4,7 @@ page-servicos,
 		border-radius: 1rem;
 	}
   .servico {
-    overflow: hidden;    
+    overflow: hidden;        
     .Fila {
       background-color: blue !important;
     }
@@ -22,6 +22,17 @@ page-servicos,
     }
     .sendSMS {
       background-color: #008000;
+    }
+    .headerServico {
+      background-color: #dedddd;
+      margin-bottom: 0px;
+    }
+    .itemServico {
+      font-size: 3.0rem;
+      margin-top: -1%;
+    }
+    .dataPassada {
+      color: red;   
     }
   }
 }

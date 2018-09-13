@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
+import * as moment from 'moment';
 
 @Injectable()
 export class ServicoService {
@@ -17,7 +18,7 @@ export class ServicoService {
     //this.servicos = SERVICOS;    
   }
 
-  getServicos(token) {
+  getServicos(token) {    
     const headerDict = {
       'Content-Type': 'application/json; charset=utf-8',
       'Authorization': 'Bearer ' + token                          
@@ -26,8 +27,21 @@ export class ServicoService {
     const requestOptions = {                                                                                                                                                                                 
       headers: new HttpHeaders(headerDict), 
     };
-
+    
     return this.http.get(this.url + 'servicos', requestOptions).map(res => res);
+  }
+
+  getConfiguracoes(token) {    
+    const headerDict = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer ' + token                          
+    }
+
+    const requestOptions = {                                                                                                                                                                                 
+      headers: new HttpHeaders(headerDict), 
+    };
+    
+    return this.http.get(this.url + 'configuracoes', requestOptions).map(res => res);
   }
 
   saveServicos(token, servico) {
@@ -40,14 +54,19 @@ export class ServicoService {
       headers: new HttpHeaders(headerDict), 
     };
 
-    if (servico.placa != undefined) 
+    if (servico.placa != undefined || servico.placa != '')  
         servico.placa = servico.placa.toUpperCase();
       
     if (servico._id == undefined) {     
       return this.http.post(this.url + 'servicos', servico, requestOptions).map(res => res);
     } else {
-      if (servico.valorRecebido.length > 0)
-        servico.situacao = 'Pago';
+      if (servico.valorRecebido.length > 0) {
+        var now = moment();
+        var dataHoraSaida = moment(now.format(), moment.ISO_8601).format('x');
+
+        servico.situacao = 'Pago';      
+        servico.dataHoraSaida = dataHoraSaida;
+      }
       return this.http.put(this.url + 'servico/' + servico._id, servico, requestOptions).map(res => res);
     }    
   }
@@ -60,7 +79,13 @@ export class ServicoService {
 
     const requestOptions = {                                                                                                                                                                                 
       headers: new HttpHeaders(headerDict), 
-    };
+    };  
+
+    if (servico.valorRecebido.length > 0 && situacao == 'Finalizado') {
+      var now = moment();
+      var horaSaida = moment(now.format(), moment.ISO_8601).format('x');      
+      servico.dataHoraSaida = horaSaida;
+    }
 
     servico.situacao = situacao;
 
@@ -69,11 +94,16 @@ export class ServicoService {
 
   getItem(id) {
     for (var i = 0; i < this.servicos.length; i++) {
-      if (this.servicos[i]._id === id) {
+      if (this.servicos[i]._id === id) {        
+
         return this.servicos[i];
       }
     }
     return null;
+  }
+
+  login(user) {    
+    return this.http.post(this.urlPrincipal + '/auth/signin', user).map(res => res);
   }
 
 }
