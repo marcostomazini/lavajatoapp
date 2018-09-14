@@ -1,8 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { Events, Platform, Nav } from "ionic-angular";
 
-import {Storage} from '@ionic/storage';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -11,6 +9,8 @@ import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { LocalWeatherPage } from "../pages/local-weather/local-weather";
 import { ServicosPage } from "../pages/movimentacoes/servicos";
+import { DepositosPage } from "../pages/movimentacoes/deposito/depositos";
+import { PagamentosPage } from "../pages/movimentacoes/pagamento/pagamentos";
 
 export interface MenuItem {
     title: string;
@@ -39,7 +39,6 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public keyboard: Keyboard,
-    private storage: Storage,
     public events: Events
   ) {
     this.initializeApp();
@@ -47,8 +46,8 @@ export class MyApp {
     this.appMenuItems = [
       {title: 'Inicio', component: ServicosPage, icon: 'home'},
       {title: 'Serviços', component: ServicosPage, icon: 'people'},
-      {title: 'Pagamentos', component: HomePage, icon: 'card'},
-      {title: 'Depositos', component: LocalWeatherPage, icon: 'mail'}
+      {title: 'Pagamentos', component: PagamentosPage, icon: 'card'},
+      {title: 'Depositos', component: DepositosPage, icon: 'mail'}
     ];
 
     this.events.subscribe('logged', (profile) => {

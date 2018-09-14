@@ -1,0 +1,38 @@
+page-pagamentos,
+.pagamentos {
+	.card {
+		border-radius: 1rem;
+	}
+  .pagamento {
+    overflow: hidden;        
+    .Fila {
+      background-color: blue !important;
+    }
+    .Atendimento { 
+      background-color: #b14747 !important;
+    }
+    .Finalizado {
+      background-color: green !important;
+    }
+    .Pago {
+      background-color: #657f80 !important;
+    }
+    .Padrao {
+      background-color: black;
+    }
+    .sendSMS {
+      background-color: #008000;
+    }
+    .headerPagamento {
+      background-color: #dedddd;
+      margin-bottom: 0px;
+    }
+    .itemPagamento {
+      font-size: 3.0rem;
+      margin-top: -1%;
+    }
+    .dataPassada {
+      color: red;   
+    }
+  }
+}

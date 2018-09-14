@@ -1,0 +1,47 @@
+<!-- -->
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <strong>Lava Jato</strong> Depósitos
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button tappable (click)="doInserirDeposito()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button tappable (click)="getDepositos()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <ion-checkbox [(ngModel)]="somenteDiaAtual" (ionChange)="getDepositos()"></ion-checkbox>
+    </ion-buttons>
+  </ion-navbar>  
+
+</ion-header>
+
+<ion-content padding class="deposito depositos detail-bg">  
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of depositos">
+      <ion-item tappable (click)="viewDetail(item)" [ngClass]="alterarCorData(item)">
+        <ion-icon name="card" class="pull-right itemDeposito"></ion-icon>
+        <h2>{{ item.descricao }}</h2>
+        <p class="pull-left">{{ item.valor }}</p>
+        <p class="pull-right" style="margin-right: -8%">{{ item.dataDeposito | date:'dd/MM HH:mm' }}</p>
+      </ion-item>
+      <ion-item-options>          
+        <button ion-button class="btn-gplus" color="secondary" icon-start
+              tappable (click)="deleteDeposito(item)">
+          <ion-icon name="trash"></ion-icon>
+          Excluir
+        </button>                
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list> 
+
+</ion-content>

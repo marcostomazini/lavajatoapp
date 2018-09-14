@@ -1,0 +1,40 @@
+<!-- -->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>depósito {{deposito.descricao}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="deposito-detail common-bg">
+
+    <ion-item>
+      <ion-label floating>
+        <ion-icon name="create" item-start class="text-primary"></ion-icon>
+        descrição
+      </ion-label>
+      <ion-input type="text" maxlength="50" name="cliente" [(ngModel)]="deposito.descricao"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>
+        <ion-icon name="calculator" item-start class="text-primary"></ion-icon>
+        valor
+      </ion-label>
+      <ion-input type="number" name="valor" [(ngModel)]="deposito.valor"></ion-input>
+    </ion-item>
+
+  <!--submit button-->
+  <ion-grid>
+    <ion-row>    
+      <ion-col col-6>
+        <button ion-button class="round btn-gplus" color="red" margin-top full tappable (click)="cancel()">Cancelar</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button class="round" color="primary" margin-top full tappable (click)="saveItem(deposito)">Salvar</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

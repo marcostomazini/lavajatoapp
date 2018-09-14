@@ -1,0 +1,18 @@
+page-pagamento-detail,
+.pagamento-detail {
+	.pagamento-info {	
+		.pagamento-features {
+		  ion-icon {
+		    min-width: 1.5rem;
+		    text-align: center;
+		  }
+		}
+	}
+
+	.item.no-border .item-inner {
+		padding-right: 0;
+		[item-end] {
+		  margin: 0;
+		}
+	}
+}

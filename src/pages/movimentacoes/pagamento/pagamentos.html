@@ -1,0 +1,47 @@
+<!-- -->
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <strong>Lava Jato</strong> Pagamentos
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button tappable (click)="doInserirPagamento()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button tappable (click)="getPagamentos()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <ion-checkbox [(ngModel)]="somenteDiaAtual" (ionChange)="getPagamentos()"></ion-checkbox>
+    </ion-buttons>
+  </ion-navbar>  
+
+</ion-header>
+
+<ion-content padding class="pagamento pagamentos detail-bg">  
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of pagamentos">
+      <ion-item tappable (click)="viewDetail(item)" [ngClass]="alterarCorData(item)">
+        <ion-icon name="cash" class="pull-right itemPagamento"></ion-icon>
+        <h2>{{ item.descricao }}</h2>
+        <p class="pull-left">{{ item.valor }}</p>
+        <p class="pull-right" style="margin-right: -8%">{{ item.dataPagamento | date:'dd/MM HH:mm' }}</p>
+      </ion-item>
+      <ion-item-options>          
+        <button ion-button class="btn-gplus" color="secondary" icon-start
+              tappable (click)="deletePagamento(item)">
+          <ion-icon name="trash"></ion-icon>
+          Excluir
+        </button>                
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list> 
+
+</ion-content>

@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import { Events, LoadingController, NavController, AlertController, ToastController, MenuController } from "ionic-angular";
-import {HomePage} from "../home/home";
 import {RegisterPage} from "../register/register";
 import {ServicosPage} from "../movimentacoes/servicos";
 import {ServicoService} from "../../services/servico-service";
@@ -41,11 +40,12 @@ export class LoginPage {
       .subscribe(
         (res) => {           
           this.profile = res;
-          this.storage.set('profile', this.profile);
-          if (this.profile.ativo == true) {
-            this.events.publish('logged', this.profile);
-            this.nav.setRoot(ServicosPage);
-          }
+          this.storage.set('profile', this.profile).then((val) => {
+            if (this.profile.ativo == true) {
+              this.events.publish('logged', this.profile);
+              this.nav.setRoot(ServicosPage);
+            }
+          });          
         },
         (err) => { 
           let error = JSON.parse(err.error);

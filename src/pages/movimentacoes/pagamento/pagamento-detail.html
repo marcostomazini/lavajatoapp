@@ -1,0 +1,51 @@
+<!-- -->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>pagamento {{pagamento.descricao}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="pagamento-detail common-bg">
+
+    <ion-item>
+      <ion-label floating>
+        <ion-icon name="create" item-start class="text-primary"></ion-icon>
+        descrição
+      </ion-label>
+      <ion-input type="text" maxlength="50" name="cliente" [(ngModel)]="pagamento.descricao"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>
+        <ion-icon name="calculator" item-start class="text-primary"></ion-icon>
+        valor
+      </ion-label>
+      <ion-input type="number" name="valor" [(ngModel)]="pagamento.valor"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Tipo do Pagamento</ion-label>
+      <ion-select [(ngModel)]="pagamento.tipoPagamento">
+        <ion-option value="CONTA">Contas em geral</ion-option>
+        <ion-option value="MATERIAL">Material de trabalho</ion-option>
+        <ion-option value="FUNCIONARIO">Funcionário</ion-option>
+        <ion-option value="EQUIPAMENTO">Novo/Manut. Equipamento</ion-option>
+        <ion-option value="OUTROS">Outros</ion-option>
+      </ion-select>
+    </ion-item>
+
+  <!--submit button-->
+  <ion-grid>
+    <ion-row>    
+      <ion-col col-6>
+        <button ion-button class="round btn-gplus" color="red" margin-top full tappable (click)="cancel()">Cancelar</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button class="round" color="primary" margin-top full tappable (click)="saveItem(pagamento)">Salvar</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

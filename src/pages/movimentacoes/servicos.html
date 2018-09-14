@@ -83,7 +83,7 @@
           <ion-icon name="car" class="pull-right itemServico"></ion-icon>
           <h2>{{ item.placa }}</h2>
           <p class="pull-left">{{ item.nomeCliente }}</p>
-          <p class="pull-right"  style="margin-right: -23px">{{ item.dataHoraEntrada | date:'dd/MM HH:mm' }}</p>
+          <p class="pull-right"  style="margin-right: -8%">{{ item.dataHoraEntrada | date:'dd/MM HH:mm' }}</p>
         </ion-item>
         <ion-item-options>          
           <button ion-button color="secondary" icon-start *ngIf="situacao === 'Fila'"

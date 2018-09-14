@@ -16,6 +16,10 @@ export interface NovoServico {
     observacao: string;
 }
 
+export class NovoServico2 {
+    name: string = '';
+}
+
 @Component({
   selector: 'page-servicos',
   templateUrl: 'servicos.html'
@@ -48,6 +52,8 @@ export class ServicosPage {
   }
 
   criarServico() : NovoServico {
+    debugger // refatorar para novo servico 2
+    var profile = new NovoServico2;
     return this.novoServico = {
       nomeCliente: '',
       placa: '',
@@ -223,8 +229,20 @@ export class ServicosPage {
   finalizarSMS(cliente) {
     this.alterarSituacao(cliente, 'Finalizado');
     var mensagem = _.findWhere(this.configuracoes, { nome: "SMS_FINALIZADO"});
-    var numeroCelular = "55" + cliente.celular.replace(/\D+/g, '');   
-    this.sms.send(numeroCelular, this.converteTexto(cliente, mensagem.valor));
+    var numeroCelular = "+55" + cliente.celular.replace(/\D+/g, '');
+    var options = {
+            replaceLineBreaks: true,
+            android: {
+                intent: 'INTENT' 
+            }
+        };
+    
+    this.sms.send(numeroCelular, this.converteTexto(cliente, mensagem.valor), options)
+      .then(()=>{
+      },(err)=>{
+        debugger
+        alert("falha no envio: " + err);
+      });
   }
  
   doFinalizarServico(item) {
@@ -321,7 +339,7 @@ export class ServicosPage {
                 showCloseButton: true
               });
               toast.present();
-              this.alterarSituacao(item, 'Finalizado');
+              this.finalizarSMS(item);
             }
           }
         ]

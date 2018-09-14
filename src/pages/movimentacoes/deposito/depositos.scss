@@ -1,0 +1,38 @@
+page-depositos,
+.depositos {
+	.card {
+		border-radius: 1rem;
+	}
+  .deposito {
+    overflow: hidden;        
+    .Fila {
+      background-color: blue !important;
+    }
+    .Atendimento { 
+      background-color: #b14747 !important;
+    }
+    .Finalizado {
+      background-color: green !important;
+    }
+    .Pago {
+      background-color: #657f80 !important;
+    }
+    .Padrao {
+      background-color: black;
+    }
+    .sendSMS {
+      background-color: #008000;
+    }
+    .headerDeposito {
+      background-color: #dedddd;
+      margin-bottom: 0px;
+    }
+    .itemDeposito {
+      font-size: 3.0rem;
+      margin-top: -1%;
+    }
+    .dataPassada {
+      color: red;   
+    }
+  }
+}

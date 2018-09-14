@@ -34,6 +34,12 @@ import {LocalWeatherPage} from "../pages/local-weather/local-weather";
 import { ServicosPage } from "../pages/movimentacoes/servicos";
 import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
 
+import { DepositosPage } from "../pages/movimentacoes/deposito/depositos";
+import { DepositoDetailPage } from "../pages/movimentacoes/deposito/deposito-detail";
+
+import { PagamentosPage } from "../pages/movimentacoes/pagamento/pagamentos";
+import { PagamentoDetailPage } from "../pages/movimentacoes/pagamento/pagamento-detail";
+
 // import services
 // end import services
 // end import services
@@ -55,8 +61,15 @@ import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
     SearchLocationPage,
     TripDetailPage,
     TripsPage,
+    
     ServicosPage,
-    ServicoDetailPage
+    ServicoDetailPage,
+
+    PagamentosPage,
+    PagamentoDetailPage,
+
+    DepositosPage,
+    DepositoDetailPage
   ],
   imports: [
     BrowserModule,
@@ -64,7 +77,8 @@ import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
     IonicModule.forRoot(MyApp, {
       scrollPadding: false,
       scrollAssist: true,
-      autoFocusAssist: false
+      autoFocusAssist: false,
+      preloadModules: true
     }),
     IonicStorageModule.forRoot({
       name: '__arquitetaweb_lavajato',
@@ -85,7 +99,11 @@ import { ServicoDetailPage } from "../pages/movimentacoes/servico-detail";
     TripDetailPage,
     TripsPage,
     ServicosPage,
-    ServicoDetailPage
+    ServicoDetailPage,
+    DepositosPage,
+    DepositoDetailPage,
+    PagamentosPage,
+    PagamentoDetailPage
   ],
   providers: [
     StatusBar,
