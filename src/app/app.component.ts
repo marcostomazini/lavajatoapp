@@ -5,9 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Keyboard } from '@ionic-native/keyboard';
 
-import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
-import { LocalWeatherPage } from "../pages/local-weather/local-weather";
 import { ServicosPage } from "../pages/movimentacoes/servicos";
 import { DepositosPage } from "../pages/movimentacoes/deposito/depositos";
 import { PagamentosPage } from "../pages/movimentacoes/pagamento/pagamentos";

@@ -7,17 +7,14 @@ import {ServicoDetailPage} from "../movimentacoes/servico-detail";
 import {Storage} from '@ionic/storage';
 import * as _ from 'underscore';
 import * as moment from 'moment';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
-export interface NovoServico {
+export class NovoServico {   
     nomeCliente: string;
     placa: string;
     celular: string;
     tipoServico: string;
     observacao: string;
-}
-
-export class NovoServico2 {
-    name: string = '';
 }
 
 @Component({
@@ -42,7 +39,7 @@ export class ServicosPage {
 
   constructor(public nav: NavController, public servicoService: ServicoService, public loadingController: LoadingController,
     public forgotCtrl: AlertController, public toastCtrl: ToastController, private storage: Storage, public events: Events,
-    public iab: InAppBrowser, public sms: SMS) {
+    public iab: InAppBrowser, private sms: SMS, private androidPermissions: AndroidPermissions) {
     this.getConfiguracoes();    
     this.getServicos();    
 
@@ -52,15 +49,7 @@ export class ServicosPage {
   }
 
   criarServico() : NovoServico {
-    debugger // refatorar para novo servico 2
-    var profile = new NovoServico2;
-    return this.novoServico = {
-      nomeCliente: '',
-      placa: '',
-      celular: '',
-      tipoServico: '',
-      observacao: ''
-    }; 
+    return new NovoServico;    
   }
 
   alterarCorData(item) {
@@ -226,8 +215,8 @@ export class ServicosPage {
     browser.show();
   }
 
-  finalizarSMS(cliente) {
-    this.alterarSituacao(cliente, 'Finalizado');
+  enviarSMS(cliente) {
+
     var mensagem = _.findWhere(this.configuracoes, { nome: "SMS_FINALIZADO"});
     var numeroCelular = "+55" + cliente.celular.replace(/\D+/g, '');
     var options = {
@@ -236,13 +225,39 @@ export class ServicosPage {
                 intent: 'INTENT' 
             }
         };
-    
+
     this.sms.send(numeroCelular, this.converteTexto(cliente, mensagem.valor), options)
       .then(()=>{
+        let toast = this.toastCtrl.create({
+          message: "sms enviado para " + numeroCelular,
+          duration: 3000,
+          position: 'top',
+          cssClass: 'dark-trans',
+          closeButtonText: 'OK',
+          showCloseButton: true
+        });
+        toast.present();   
       },(err)=>{
-        debugger
         alert("falha no envio: " + err);
       });
+  }
+
+  finalizarSMS(cliente) {
+    this.alterarSituacao(cliente, 'Finalizado');    
+
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.SEND_SMS).then(
+      result => {
+        if (result.hasPermission) {
+          this.enviarSMS(cliente);
+        }
+      },
+      err => { 
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).then(
+          result => {
+            this.enviarSMS(cliente);
+        });
+      }
+    );        
   }
  
   doFinalizarServico(item) {

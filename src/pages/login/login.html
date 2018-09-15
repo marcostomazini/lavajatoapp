@@ -29,21 +29,21 @@
       </ion-item>
     </form>
 
-    <p text-right ion-text color="secondary" tappable (click)="semAcao()"><strong>Esqueceu a Senha?</strong></p>
+    <p text-left class="pull-left" ion-text color="secondary" tappable (click)="doConfiguracoes()"><strong>Configurações</strong></p>
+    <p text-right class="pull-right" ion-text color="secondary" tappable (click)="semAcao()"><strong>Esqueceu a Senha?</strong></p>
 
     <div>
-      <button ion-button icon-start block color="dark" tappable (click)="login(user)">
+
+      <button ion-button icon-start block color="dark" tappable (click)="login(user)" [disabled]="!podeLogar">
         <ion-icon name="log-in"></ion-icon>
         Entrar
       </button>
-
       
       <button ion-button icon-only block color="dark" class="btn-gplus" tappable (click)="semAcao()">
         <ion-icon name="logo-googleplus"></ion-icon>
       </button>
 
     </div>
-
 
     <!-- Other links -->    
     <div text-center margin-top>

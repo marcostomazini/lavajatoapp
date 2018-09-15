@@ -1,18 +1,24 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Events } from "ionic-angular";
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import * as moment from 'moment';
+import { Storage } from '@ionic/storage';
 
 @Injectable()
 export class ServicoService {
   url: string;
   response: any;
-  urlPrincipal = 'http://leilao.arquitetaweb.com';
+  //urlPrincipal = 'http://leilao.arquitetaweb.com';
+  public urlPrincipal: string;
   //urlPrincipal = 'http://localhost:3000';
   urlMobile = '/api/mobile/';
 
-  constructor(public http: HttpClient) {
-    this.url = this.urlPrincipal + this.urlMobile;    
+  constructor(public http: HttpClient, private storage: Storage, private events: Events) {
+        
+    this.events.subscribe('updateConfiguracao', (val) => {
+      this.setLocalConfiguracao(val);
+    });
   }
 
 // #region Servicos
@@ -163,7 +169,27 @@ export class ServicoService {
       }
     }
     return null;
-  }*/
+  }*/  
+
+  saveLocalConfiguracao(configuracao) {
+    return this.storage.set('configuracao', configuracao);
+  }
+
+  setLocalConfiguracao(configuracao) {
+    if (configuracao != null) {
+      this.urlPrincipal = configuracao.url;
+      this.url = this.urlPrincipal + this.urlMobile;
+    }
+  }
+
+  getLocalConfiguracao() : Promise<{ url: string }> {
+    return new Promise((resolve, reject) => {      
+      this.storage.get('configuracao').then((val) => {
+        this.setLocalConfiguracao(val);
+        resolve(val);
+      });      
+    });    
+  }
 
   deleteGeneric(token, item, modulo) {
     const headerDict = {

@@ -1,19 +1,41 @@
 import {Component} from "@angular/core";
 import {NavController} from "ionic-angular";
-import {LoginPage} from "../login/login";
+import {Storage} from '@ionic/storage';
+import { Events } from "ionic-angular";
 
+export interface Configuracao {
+  url: string;    
+}
 
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html'
 })
+
 export class SettingsPage {
 
-  constructor(public nav: NavController) {
+   public configuracao: Configuracao = {
+    url: ''
   }
 
-  // logout
-  logout() {
-    this.nav.setRoot(LoginPage);
+  constructor(public nav: NavController, private storage: Storage, private events: Events) {
+    this.getConfiguracao();
+  }
+
+  getConfiguracao() {
+    this.storage.get('configuracao').then((val) => {
+      this.configuracao = val;
+    });
+  }
+
+  save() {
+  	this.storage.set('configuracao', this.configuracao).then((val) => {
+      this.events.publish('updateConfiguracao', val);
+  		this.nav.pop();
+  	});
+  }
+  
+  cancel() {
+    this.nav.pop();
   }
 }

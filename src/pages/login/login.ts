@@ -1,31 +1,57 @@
 import {Component} from "@angular/core";
 import { Events, LoadingController, NavController, AlertController, ToastController, MenuController } from "ionic-angular";
-import {RegisterPage} from "../register/register";
 import {ServicosPage} from "../movimentacoes/servicos";
+import {SettingsPage} from "../settings/settings";
 import {ServicoService} from "../../services/servico-service";
 import 'rxjs/add/operator/map';
 import {Storage} from '@ionic/storage';
+
+export interface Configuracao {
+  url: string;
+}
+
+export interface Usuario {
+  username: string;
+  password: string;
+}
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
+
 export class LoginPage {
   public profile: any;
-  public user = {
-    username: 'teste@teste.com',
-    password: 'teste123'
+  private podeLogar: boolean = false;
+
+  public user : Usuario = {
+    username: '',
+    password: ''
   };
+
+  public configuracao: Configuracao = {
+    url: 'http://lavajato.arquitetaweb.com'
+  }; 
   
   constructor(public nav: NavController, public events: Events, public loadingController: LoadingController, 
     public forgotCtrl: AlertController, public menu: MenuController, private storage: Storage, 
     public toastCtrl: ToastController, public servicoService: ServicoService) {
     this.menu.swipeEnable(false);
-  }
 
-  // go to register page
-  register() {
-    this.nav.setRoot(RegisterPage);
+    this.servicoService.getLocalConfiguracao().then((val) => {
+      if (val == null) {
+        this.servicoService.saveLocalConfiguracao(this.configuracao).then((val) => { 
+          this.servicoService.setLocalConfiguracao(val);
+          this.podeLogar = true;
+        });
+      } else {        
+        this.podeLogar = true;
+      }
+    });
+
+    this.storage.get('usuario').then((val) => {
+      if (val != null) this.user = val;
+    });
   }
 
   // login and go to home page
@@ -35,7 +61,6 @@ export class LoginPage {
       content: "aguarde..."
     });  
     loader.present();        
-
     this.servicoService.login(request)
       .subscribe(
         (res) => {           
@@ -45,7 +70,9 @@ export class LoginPage {
               this.events.publish('logged', this.profile);
               this.nav.setRoot(ServicosPage);
             }
-          });          
+          });
+
+          this.storage.set('usuario', this.user);
         },
         (err) => { 
           let error = JSON.parse(err.error);
@@ -64,6 +91,10 @@ export class LoginPage {
           loader.dismiss();
         }
       );
+  }
+
+  doConfiguracoes() {
+    this.nav.push(SettingsPage);
   }
 
   semAcao() {

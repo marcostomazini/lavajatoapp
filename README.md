@@ -14,7 +14,8 @@ ionic cordova run android
 "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --user-data-dir="C:\ChromeDevSession" --disable-web-security
 
 
-
+// icones
+https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=image&foreground.space.trim=1&foreground.space.pad=0&foreColor=rgba(96%2C%20125%2C%20139%2C%200)&backColor=rgb(96%2C%20125%2C%20139)&crop=0&backgroundShape=square&effects=none&name=ic_launcher
 
 // android
 sdkmanager "platform-tools" "platforms;android-26" "build-tools;27.0.3"
