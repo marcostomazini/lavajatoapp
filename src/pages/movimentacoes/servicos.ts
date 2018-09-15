@@ -162,7 +162,7 @@ export class ServicosPage {
       this.servicoService.alteraSituacao(val.token, servico, situacao)
       .subscribe(
         (res) => {
-          let toast = this.toastCtrl.create({
+          /*let toast = this.toastCtrl.create({
               message: "situação alterada para " + situacao.toLowerCase(),
               duration: 3000,
               position: 'top',
@@ -170,7 +170,7 @@ export class ServicosPage {
               closeButtonText: 'OK',
               showCloseButton: true
             });
-            toast.present();              
+            toast.present();*/
         },
         (err) => { 
           let toast = this.toastCtrl.create({
@@ -186,8 +186,8 @@ export class ServicosPage {
         },
         () => {
           this.events.publish('updateServico');
-            loader.dismiss();
-            this.nav.pop();          
+          loader.dismiss();
+          this.nav.pop();          
         }
       );
     });       
@@ -216,7 +216,6 @@ export class ServicosPage {
   }
 
   enviarSMS(cliente) {
-
     var mensagem = _.findWhere(this.configuracoes, { nome: "SMS_FINALIZADO"});
     var numeroCelular = "+55" + cliente.celular.replace(/\D+/g, '');
     var options = {
@@ -227,7 +226,7 @@ export class ServicosPage {
         };
 
     this.sms.send(numeroCelular, this.converteTexto(cliente, mensagem.valor), options)
-      .then(()=>{
+      .then((res)=>{
         let toast = this.toastCtrl.create({
           message: "sms enviado para " + numeroCelular,
           duration: 3000,
@@ -242,13 +241,20 @@ export class ServicosPage {
       });
   }
 
-  finalizarSMS(cliente) {
+  finalizarSMS(cliente) {    
     this.alterarSituacao(cliente, 'Finalizado');    
 
+    // pra testar no browse
+    //this.enviarSMS(cliente);
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.SEND_SMS).then(
       result => {
         if (result.hasPermission) {
           this.enviarSMS(cliente);
+        } else {
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.SEND_SMS).then(
+            result => {
+              this.enviarSMS(cliente);
+          });  
         }
       },
       err => { 
@@ -257,7 +263,7 @@ export class ServicosPage {
             this.enviarSMS(cliente);
         });
       }
-    );        
+    );   
   }
  
   doFinalizarServico(item) {
@@ -314,46 +320,21 @@ export class ServicosPage {
           },
           {
             text: 'Somente Finalizar',
-            handler: data => {
-              let toast = this.toastCtrl.create({
-                message: 'Finalizar enviado',
-                duration: 3000,
-                position: 'top',
-                cssClass: 'dark-trans',
-                closeButtonText: 'OK',
-                showCloseButton: true
-              });
-              toast.present();
+            handler: data => {              
               this.alterarSituacao(item, 'Finalizado');
             }
           },
           {
             text: 'WhatsApp',
-            handler: data => {             
-              let toast = this.toastCtrl.create({
-                message: 'Whats enviado',
-                duration: 3000,
-                position: 'top',
-                cssClass: 'dark-trans',
-                closeButtonText: 'OK',
-                showCloseButton: true
-              });
-              toast.present();
+            handler: data => {
+              item.celular = data.celular;      
               this.finalizarWhatsApp(item);
             }
           },
           {
             text: 'SMS',
             handler: data => {
-              let toast = this.toastCtrl.create({
-                message: 'SMS enviado',
-                duration: 3000,
-                position: 'top',
-                cssClass: 'dark-trans',
-                closeButtonText: 'OK',
-                showCloseButton: true
-              });
-              toast.present();
+              item.celular = data.celular;
               this.finalizarSMS(item);
             }
           }
@@ -364,6 +345,8 @@ export class ServicosPage {
   }
 
   converteTexto(cliente, texto) {
+    if (texto == undefined || texto == null || texto == '') 
+      texto = "Ola %nome%, já finalizamos o serviço e já pode ser retirado o seu veiculo, muito obrigado";
     var novoTexto = texto.replace("%nome%", cliente.nomeCliente);
     novoTexto = novoTexto.replace("%placa%", cliente.placa);
     novoTexto = novoTexto.replace("%servico%", cliente.tipoServico);
